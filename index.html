@@ -3,50 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEDARSAGS | Digital Hub</title>
+    <title>PEDARSAGS | Official Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #0a0a0a; color: white; font-family: sans-serif; }
-        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); transition: 0.3s; }
+        body { background: #050505; color: white; font-family: sans-serif; }
+        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); transition: 0.3s; border-radius: 20px; }
         .glass:hover { background: rgba(255,255,255,0.08); transform: translateY(-3px); border-color: #39ff14; }
-        .neon-text { text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+        .neon-text { text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); color: #39ff14; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     </style>
 </head>
 <body class="max-w-md mx-auto px-6 py-12">
 
-    <div class="text-center mb-10">
-        <div class="w-24 h-24 bg-zinc-900 rounded-full mx-auto mb-4 border-2 border-green-500 p-1">
+    <div class="text-center mb-8">
+        <div class="w-24 h-24 bg-zinc-900 rounded-full mx-auto mb-4 border-2 border-green-500 p-1 shadow-[0_0_20px_rgba(57,255,20,0.3)]">
             <div class="w-full h-full bg-cover rounded-full" style="background-image: url('https://via.placeholder.com/150')"></div>
         </div>
         <h1 class="text-3xl font-black neon-text tracking-tighter">PEDARSAGS</h1>
-        <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Artist & Developer</p>
+        <p class="text-gray-500 text-[10px] mt-2 uppercase tracking-[0.2em]">Artist & Digital Developer</p>
+    </div>
+
+    <div class="video-container mb-10 shadow-2xl">
+        <iframe src="https://www.youtube.com/embed/n4XW6XfV-X4" frameborder="0" allowfullscreen></iframe>
     </div>
 
     <div id="links-container" class="space-y-3 mb-12">
         </div>
 
     <div id="store-section">
-        <h3 class="text-[10px] font-bold text-gray-500 mb-6 uppercase tracking-[0.3em] text-center italic">Official Store / محصولات</h3>
+        <h3 class="text-[10px] font-bold text-gray-400 mb-6 uppercase tracking-[0.3em] text-center italic">Official Merch / فروشگاه</h3>
         <div id="product-list" class="space-y-4">
-            <div class="text-center text-xs opacity-30">در حال اتصال به فروشگاه...</div>
+            <div class="text-center text-xs opacity-20 animate-pulse">در حال فراخوانی محصولات...</div>
         </div>
     </div>
 
     <script>
-        // --- ۱. فقط این بخش رو ویرایش کن ---
+        // --- ۱. بخش تنظیمات (فقط اینجا را تغییر بده) ---
         const linksConfig = [
-            "https://open.spotify.com/artist/YOUR_ID", // لینک اسپاتیفای
-            "https://youtube.com/@PEDARSAGS",       // لینک یوتیوب
-            "https://instagram.com/arman_mp",       // لینک اینستاگرام
-            "https://t.me/pedarsags_channel",       // لینک تلگرام
-            "https://apple.co/3xyz",                // لینک اپل موزیک
-            "https://soundcloud.com/arman_mp"       // لینک ساندکلاد
+            "https://open.spotify.com/artist/YOUR_ID",
+            "https://youtube.com/@PEDARSAGS",
+            "https://instagram.com/arman_mp",
+            "https://t.me/pedarsags_channel",
+            "https://apple.co/music",
+            "https://soundcloud.com/arman_mp"
         ];
 
         const API_KEY = 'ptkn_f6245312-ade0-4800-8368-357ad38d20fd';
 
-        // --- ۲. منطق هوشمند سازی دکمه‌ها ---
+        // --- ۲. منطق دکمه‌های هوشمند ---
         const platformIcons = {
             spotify: { icon: 'fa-spotify', color: '#1DB954', label: 'Spotify' },
             youtube: { icon: 'fa-youtube', color: '#FF0000', label: 'YouTube' },
@@ -59,54 +65,44 @@
         function buildLinks() {
             const container = document.getElementById('links-container');
             container.innerHTML = '';
-
             linksConfig.forEach(url => {
-                let platform = 'link'; // پیش‌فرض
-                for (const key in platformIcons) {
-                    if (url.toLowerCase().includes(key)) {
-                        platform = key;
-                        break;
-                    }
-                }
-
-                const config = platformIcons[platform] || { icon: 'fa-link', color: '#fff', label: 'Link' };
-                
+                let platform = 'link';
+                for (const key in platformIcons) { if (url.toLowerCase().includes(key)) { platform = key; break; } }
+                const config = platformIcons[platform] || { icon: 'fa-link', color: '#fff', label: 'Official Link' };
                 container.innerHTML += `
-                    <a href="${url}" target="_blank" class="glass p-4 flex items-center justify-between rounded-2xl group">
+                    <a href="${url}" target="_blank" class="glass p-4 flex items-center justify-between group">
                         <div class="flex items-center gap-4">
                             <i class="fab ${config.icon} text-2xl" style="color: ${config.color}"></i>
-                            <span class="font-bold text-sm">${config.label}</span>
+                            <span class="font-bold text-sm tracking-wide">${config.label}</span>
                         </div>
-                        <i class="fas fa-chevron-left text-[10px] opacity-20 group-hover:opacity-100 transition"></i>
-                    </a>
-                `;
+                        <i class="fas fa-chevron-left text-[10px] opacity-20 group-hover:opacity-100 group-hover:text-green-400 transition"></i>
+                    </a>`;
             });
         }
 
-        // --- ۳. فراخوانی محصولات ---
+        // --- ۳. دریافت محصولات از Fourthwall ---
         async function loadStore() {
             const list = document.getElementById('product-list');
             try {
                 const res = await fetch('https://api.fourthwall.com/v1/products?limit=4', {
-                    headers: { 'X-Store-API-Key': API_KEY }
+                    headers: { 'X-Store-API-Key': API_KEY, 'Accept': 'application/json' }
                 });
                 const data = await res.json();
+                if (!data.results || data.results.length === 0) throw new Error();
                 list.innerHTML = '';
-
                 data.results.forEach(p => {
                     list.innerHTML += `
-                        <a href="https://pedarsags-shop.fourthwall.com/products/${p.handle}" target="_blank" class="glass p-3 flex items-center gap-4 border-none">
-                            <img src="${p.images[0].url}" class="w-16 h-16 object-cover rounded-xl shadow-lg">
-                            <div class="flex-1">
-                                <h4 class="text-xs font-bold">${p.name}</h4>
-                                <p class="text-green-500 text-[10px] font-mono mt-1">${p.price.amount} ${p.price.currency}</p>
+                        <a href="https://pedarsags-shop.fourthwall.com/products/${p.handle}" target="_blank" class="glass p-3 flex items-center gap-4 border-none mb-2">
+                            <img src="${p.images[0].url}" class="w-14 h-14 object-cover rounded-xl">
+                            <div class="flex-1 text-right overflow-hidden">
+                                <h4 class="text-xs font-bold truncate">${p.name}</h4>
+                                <p class="text-green-400 text-[10px] mt-1">${p.price.amount} ${p.price.currency}</p>
                             </div>
-                            <span class="bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold">SHOP</span>
-                        </a>
-                    `;
+                            <div class="bg-white/10 px-3 py-1 rounded-full text-[9px] font-black">BUY</div>
+                        </a>`;
                 });
             } catch (e) {
-                list.innerHTML = '<div class="text-center text-red-500 text-[10px]">خطا: سایت را آنلاین (Online) کنید تا محصولات نمایش داده شوند.</div>';
+                list.innerHTML = '<div class="text-center text-red-500 text-[10px]">اتصال به فروشگاه برقرار نشد. آدرس را در Fourthwall مجاز کنید.</div>';
             }
         }
 
