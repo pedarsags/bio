@@ -3,72 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEDARSAGS | Official Hub</title>
+    <title>PEDARSAGS | Official Bio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #050505; color: white; font-family: sans-serif; }
+        body { background: #050505; color: white; font-family: sans-serif; text-align: right; }
         .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); transition: 0.3s; border-radius: 20px; }
         .glass:hover { background: rgba(255,255,255,0.08); transform: translateY(-3px); border-color: #39ff14; }
         .neon-text { text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); color: #39ff14; }
-        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     </style>
 </head>
-<body class="max-w-md mx-auto px-6 py-12 text-right">
+<body class="max-w-md mx-auto px-6 py-12">
 
     <div class="text-center mb-8">
-        <div class="w-24 h-24 bg-zinc-900 rounded-full mx-auto mb-4 border-2 border-green-500 p-1 shadow-[0_0_20px_rgba(57,255,20,0.3)]">
+        <div class="w-24 h-24 bg-zinc-900 rounded-full mx-auto mb-4 border-2 border-green-500 p-1">
             <div class="w-full h-full bg-cover rounded-full" style="background-image: url('https://via.placeholder.com/150')"></div>
         </div>
-        <h1 class="text-3xl font-black neon-text tracking-tighter">PEDARSAGS</h1>
-        <p class="text-gray-500 text-[10px] mt-2 uppercase tracking-[0.2em]">Artist & Digital Developer</p>
-    </div>
-
-    <div class="video-container mb-10 shadow-2xl">
-        <iframe src="https://www.youtube.com/embed/n4XW6XfV-X4" frameborder="0" allowfullscreen></iframe>
+        <h1 class="text-3xl font-black neon-text">PEDARSAGS</h1>
     </div>
 
     <div id="links-container" class="space-y-3 mb-12"></div>
 
     <div id="store-section">
-        <h3 class="text-[10px] font-bold text-gray-400 mb-6 uppercase tracking-[0.3em] text-center italic">Official Merch / فروشگاه</h3>
+        <h3 class="text-[10px] font-bold text-gray-400 mb-6 uppercase text-center italic tracking-widest text-green-500">OFFICIAL MERCH</h3>
         <div id="product-list" class="space-y-4">
-            <div class="text-center text-xs opacity-20 animate-pulse">در حال فراخوانی محصولات...</div>
+            <div class="text-center text-xs opacity-20 animate-pulse">در حال اتصال به فروشگاه...</div>
         </div>
     </div>
 
     <script>
-        // ۱. لیست لینک‌ها (هر زمان خواستی اینجا اضافه یا کم کن)
+        // تنظیمات لینک‌ها
         const linksConfig = [
             "https://open.spotify.com/artist/YOUR_ID",
             "https://youtube.com/@PEDARSAGS",
             "https://instagram.com/arman_mp",
-            "https://t.me/pedarsags_channel",
-            "https://apple.co/music"
+            "https://t.me/pedarsags_channel"
         ];
 
-        // توکن شما (ثابت)
+        // توکن اختصاصی شما
         const API_KEY = 'ptkn_f6245312-ade0-4800-8368-357ad38d20fd';
 
-        // ۲. ساخت دکمه‌های هوشمند
         const platformIcons = {
             spotify: { icon: 'fa-spotify', color: '#1DB954', label: 'Spotify' },
             youtube: { icon: 'fa-youtube', color: '#FF0000', label: 'YouTube' },
             instagram: { icon: 'fa-instagram', color: '#E4405F', label: 'Instagram' },
-            telegram: { icon: 'fa-telegram', color: '#0088cc', label: 'Telegram' },
-            apple: { icon: 'fa-apple', color: '#FFFFFF', label: 'Apple Music' }
+            telegram: { icon: 'fa-telegram', color: '#0088cc', label: 'Telegram' }
         };
 
         function buildLinks() {
             const container = document.getElementById('links-container');
-            container.innerHTML = '';
             linksConfig.forEach(url => {
                 let platform = 'link';
                 for (const key in platformIcons) { if (url.toLowerCase().includes(key)) { platform = key; break; } }
-                const config = platformIcons[platform] || { icon: 'fa-link', color: '#fff', label: 'Official Link' };
+                const config = platformIcons[platform] || { icon: 'fa-link', color: '#fff', label: 'Link' };
                 container.innerHTML += `
-                    <a href="${url}" target="_blank" class="glass p-4 flex items-center justify-between group">
+                    <a href="${url}" target="_blank" class="glass p-4 flex items-center justify-between group mb-3">
                         <div class="flex items-center gap-4">
                             <i class="fab ${config.icon} text-2xl" style="color: ${config.color}"></i>
                             <span class="font-bold text-sm tracking-wide">${config.label}</span>
@@ -78,7 +67,6 @@
             });
         }
 
-        // ۳. فراخوانی محصولات (اصلاح شده برای رفع مشکل CORS)
         async function loadStore() {
             const list = document.getElementById('product-list');
             try {
@@ -91,7 +79,6 @@
                 });
                 
                 if (!res.ok) throw new Error();
-
                 const data = await res.json();
                 list.innerHTML = '';
 
@@ -99,19 +86,19 @@
                     data.results.forEach(p => {
                         list.innerHTML += `
                             <a href="https://pedarsags-shop.fourthwall.com/products/${p.handle}" target="_blank" class="glass p-3 flex items-center gap-4 border-none mb-2">
-                                <img src="${p.images[0].url}" class="w-14 h-14 object-cover rounded-xl shadow-lg">
-                                <div class="flex-1 text-right overflow-hidden">
+                                <img src="${p.images[0].url}" class="w-14 h-14 object-cover rounded-xl">
+                                <div class="flex-1 overflow-hidden">
                                     <h4 class="text-xs font-bold truncate">${p.name}</h4>
                                     <p class="text-green-400 text-[10px] mt-1 font-mono">${p.price.amount} ${p.price.currency}</p>
                                 </div>
-                                <div class="bg-white/10 px-3 py-1 rounded-full text-[9px] font-black">BUY</div>
+                                <div class="bg-white/10 px-3 py-1 rounded-full text-[9px] font-black italic">SHOP</div>
                             </a>`;
                     });
                 } else {
-                    list.innerHTML = '<div class="text-center text-xs opacity-50 italic text-gray-500">فروشگاه در حال حاضر خالی است.</div>';
+                    list.innerHTML = '<div class="text-center text-xs opacity-50">محصولی پیدا نشد.</div>';
                 }
             } catch (e) {
-                list.innerHTML = '<div class="text-center text-red-500 text-[9px] bg-red-500/10 p-3 rounded-xl border border-red-500/20">خطای دسترسی: آدرس External Store URL را در پنل Fourthwall ذخیره کنید.</div>';
+                list.innerHTML = '<div class="text-center text-red-500 text-[10px] p-4 glass border-red-500/20">خطا: آدرس سایت را در پنل Fourthwall مجاز (Allow) کنید.</div>';
             }
         }
 
