@@ -15,7 +15,7 @@
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     </style>
 </head>
-<body class="max-w-md mx-auto px-6 py-12">
+<body class="max-w-md mx-auto px-6 py-12 text-right">
 
     <div class="text-center mb-8">
         <div class="w-24 h-24 bg-zinc-900 rounded-full mx-auto mb-4 border-2 border-green-500 p-1 shadow-[0_0_20px_rgba(57,255,20,0.3)]">
@@ -29,8 +29,7 @@
         <iframe src="https://www.youtube.com/embed/n4XW6XfV-X4" frameborder="0" allowfullscreen></iframe>
     </div>
 
-    <div id="links-container" class="space-y-3 mb-12">
-        </div>
+    <div id="links-container" class="space-y-3 mb-12"></div>
 
     <div id="store-section">
         <h3 class="text-[10px] font-bold text-gray-400 mb-6 uppercase tracking-[0.3em] text-center italic">Official Merch / فروشگاه</h3>
@@ -40,26 +39,25 @@
     </div>
 
     <script>
-        // --- ۱. بخش تنظیمات (فقط اینجا را تغییر بده) ---
+        // ۱. لیست لینک‌ها (هر زمان خواستی اینجا اضافه یا کم کن)
         const linksConfig = [
             "https://open.spotify.com/artist/YOUR_ID",
             "https://youtube.com/@PEDARSAGS",
             "https://instagram.com/arman_mp",
             "https://t.me/pedarsags_channel",
-            "https://apple.co/music",
-            "https://soundcloud.com/arman_mp"
+            "https://apple.co/music"
         ];
 
+        // توکن شما (ثابت)
         const API_KEY = 'ptkn_f6245312-ade0-4800-8368-357ad38d20fd';
 
-        // --- ۲. منطق دکمه‌های هوشمند ---
+        // ۲. ساخت دکمه‌های هوشمند
         const platformIcons = {
             spotify: { icon: 'fa-spotify', color: '#1DB954', label: 'Spotify' },
             youtube: { icon: 'fa-youtube', color: '#FF0000', label: 'YouTube' },
             instagram: { icon: 'fa-instagram', color: '#E4405F', label: 'Instagram' },
             telegram: { icon: 'fa-telegram', color: '#0088cc', label: 'Telegram' },
-            apple: { icon: 'fa-apple', color: '#FFFFFF', label: 'Apple Music' },
-            soundcloud: { icon: 'fa-soundcloud', color: '#FF3300', label: 'SoundCloud' }
+            apple: { icon: 'fa-apple', color: '#FFFFFF', label: 'Apple Music' }
         };
 
         function buildLinks() {
@@ -75,34 +73,45 @@
                             <i class="fab ${config.icon} text-2xl" style="color: ${config.color}"></i>
                             <span class="font-bold text-sm tracking-wide">${config.label}</span>
                         </div>
-                        <i class="fas fa-chevron-left text-[10px] opacity-20 group-hover:opacity-100 group-hover:text-green-400 transition"></i>
+                        <i class="fas fa-chevron-left text-[10px] opacity-20 group-hover:opacity-100 transition"></i>
                     </a>`;
             });
         }
 
-        // --- ۳. دریافت محصولات از Fourthwall ---
+        // ۳. فراخوانی محصولات (اصلاح شده برای رفع مشکل CORS)
         async function loadStore() {
             const list = document.getElementById('product-list');
             try {
-                const res = await fetch('https://api.fourthwall.com/v1/products?limit=4', {
-                    headers: { 'X-Store-API-Key': API_KEY, 'Accept': 'application/json' }
+                const res = await fetch('https://api.fourthwall.com/v1/products?limit=5', {
+                    method: 'GET',
+                    headers: { 
+                        'X-Store-API-Key': API_KEY,
+                        'Accept': 'application/json'
+                    }
                 });
+                
+                if (!res.ok) throw new Error();
+
                 const data = await res.json();
-                if (!data.results || data.results.length === 0) throw new Error();
                 list.innerHTML = '';
-                data.results.forEach(p => {
-                    list.innerHTML += `
-                        <a href="https://pedarsags-shop.fourthwall.com/products/${p.handle}" target="_blank" class="glass p-3 flex items-center gap-4 border-none mb-2">
-                            <img src="${p.images[0].url}" class="w-14 h-14 object-cover rounded-xl">
-                            <div class="flex-1 text-right overflow-hidden">
-                                <h4 class="text-xs font-bold truncate">${p.name}</h4>
-                                <p class="text-green-400 text-[10px] mt-1">${p.price.amount} ${p.price.currency}</p>
-                            </div>
-                            <div class="bg-white/10 px-3 py-1 rounded-full text-[9px] font-black">BUY</div>
-                        </a>`;
-                });
+
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(p => {
+                        list.innerHTML += `
+                            <a href="https://pedarsags-shop.fourthwall.com/products/${p.handle}" target="_blank" class="glass p-3 flex items-center gap-4 border-none mb-2">
+                                <img src="${p.images[0].url}" class="w-14 h-14 object-cover rounded-xl shadow-lg">
+                                <div class="flex-1 text-right overflow-hidden">
+                                    <h4 class="text-xs font-bold truncate">${p.name}</h4>
+                                    <p class="text-green-400 text-[10px] mt-1 font-mono">${p.price.amount} ${p.price.currency}</p>
+                                </div>
+                                <div class="bg-white/10 px-3 py-1 rounded-full text-[9px] font-black">BUY</div>
+                            </a>`;
+                    });
+                } else {
+                    list.innerHTML = '<div class="text-center text-xs opacity-50 italic text-gray-500">فروشگاه در حال حاضر خالی است.</div>';
+                }
             } catch (e) {
-                list.innerHTML = '<div class="text-center text-red-500 text-[10px]">اتصال به فروشگاه برقرار نشد. آدرس را در Fourthwall مجاز کنید.</div>';
+                list.innerHTML = '<div class="text-center text-red-500 text-[9px] bg-red-500/10 p-3 rounded-xl border border-red-500/20">خطای دسترسی: آدرس External Store URL را در پنل Fourthwall ذخیره کنید.</div>';
             }
         }
 
